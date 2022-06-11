@@ -5,6 +5,8 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 const myUploadMiddleware = upload.single("file");
 
+console.log('12234')
+console.log(process.env.API_KEY)
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.API_KEY,
@@ -24,6 +26,7 @@ function runMiddleware(req, res, fn) {
 }
 
 export default async function handler(req, res) {
+  console.log(1)
   let response;
   if (req.method === "POST") {
     await runMiddleware(req, res, myUploadMiddleware);
@@ -32,7 +35,7 @@ export default async function handler(req, res) {
     try {
       const b64 = Buffer.from(file.buffer).toString("base64");
       let dataURI = "data:" + file.mimetype + ";base64," + b64;
-
+      console.log(2)
       response = await cloudinary.uploader.upload(dataURI, {
         folder: "file-sharing-app",
         resource_type: "auto",
